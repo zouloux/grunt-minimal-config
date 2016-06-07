@@ -1,6 +1,6 @@
 {
   "name": "grunt-minimal-config",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Grunt plugin automatically loading NPM tasks and associated config file.",
   "scripts": {
     "test": "grunt test --stack"

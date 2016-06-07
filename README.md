@@ -11,15 +11,15 @@ This plugin is used in [solid web-base](https://github.com/solid-js/web-base), a
 
 ### Usage
 
-By default, config files are named like the grunt plugin, inside a `grunt-config` subdirectory.
+Config files are named like the grunt plugin, inside a `grunt-config` subdirectory. This directory can be changed with `options.path`.
 
-Exemple :
+Exemple for grunt-concat :
 - `grunt-config/concat.js`
 
 
 ### GruntFile.js configuration exemple :
 
-```
+```javascript
 module.exports = function (grunt)
 {
     // Init global config parameters
@@ -51,6 +51,7 @@ module.exports = function (grunt)
                 'imagemin',
                 //'json', // Will be ignored, grunt-plugin will be not loaded
                 'less',
+                'scaff',
                 'ts',
                 'uglify',
                 'watch'
@@ -77,10 +78,11 @@ module.exports = function (grunt)
 
 ### concat.js configuration exemple :
 
-```
+```javascript
 // Export a function which return the config object
 // Note we have grunt as parameter for helper functions
-module.exports = function (grunt) {
+module.exports = function (grunt)
+{
     return {
         // Concat options
         options: {
