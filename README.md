@@ -25,6 +25,9 @@ module.exports = function (grunt)
     // Init global config parameters
     grunt.config.init({
 
+        // Load package definitions (needed to discover grunt packages)
+        pkg: grunt.file.readJSON('package.json'),
+
         // Path configuration exemple ...
         path: {
             // Path to the source

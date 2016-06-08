@@ -66,8 +66,9 @@ module.exports = function (pGrunt)
 		pGrunt.config.merge(currentGruntMerge);
 	}
 
-	// Show our respect
-	pGrunt.log.ok('Minimal config : ' + modules.length + ' modules loaded (' + modules.join(', ') + ')');
+	// Show loading infos
+	console.log('');
+	pGrunt.log.oklns('Minimal config : ' + modules.length + ' modules loaded (' + modules.join(', ') + ')');
 
 	// Load grunt package from config
 	var gruntPackage = pGrunt.config.get('pkg');
