@@ -52,8 +52,21 @@ module.exports = function (pGrunt)
 		// New system, config must export a function which is returning config. So function have grunt as first argument.
 		else if (typeof currentConfigObject == 'function')
 		{
-			// Load config with the grunt module name as key
-			currentGruntMerge[currentConfigName] = currentConfigObject(pGrunt);
+			// Call function and get result
+			var configResult = currentConfigObject(pGrunt);
+
+			// If this is an array and not an object
+			if ( Array.isArray(configResult) )
+			{
+				// First slot is the name
+				// Second slot is the config
+				currentGruntMerge[configResult[0]] = configResult[1];
+			}
+			else
+			{
+				// Load config with the grunt module name as key
+				currentGruntMerge[currentConfigName] = configResult;
+			}
 		}
 
 		// Oups

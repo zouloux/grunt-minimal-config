@@ -104,8 +104,64 @@ module.exports = function (grunt)
 
         // Configure your concat task
         myTask : {
-            ...
+           //...
         }
-    }
+    };
 };
 ```
+
+
+### Non standard NPM tasks
+
+**Special case :**
+You want to use an NPM grunt plugin which has a different name in config than in NPM.
+
+**For example :**
+*grunt-sprite-svg* uses config name : *sprite_svg* (note the use of dash and underscore here)
+
+You have to load it like this :
+
+**Gruntfile.js :**
+
+```javascript
+// (...)
+    minimalConfig: {
+        // Load NPM tasks and config
+        npm: [
+            'sprite-svg'
+        ]
+    }
+// (...)
+```
+
+And declare the config file like so :
+
+**grunt-config/sprite-svg.js :**
+
+```javascript
+module.exports = function (grunt)
+{
+    // Not here we return an array
+    // with config name as first element
+    // and config data coming right after
+    return [
+        // Name of the config
+        'sprite_svg',
+        
+        // Config data
+        {
+            // Options
+            options: {
+                //...
+            },
+
+            // Configure your concat task
+            myTask : {
+                //...
+            }
+        }
+    ];
+};
+```
+
+
