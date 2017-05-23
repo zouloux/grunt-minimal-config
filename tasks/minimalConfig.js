@@ -7,7 +7,7 @@ module.exports = function (pGrunt)
 	options.path = options.path || 'grunt-config/';
 
 	// List of package name prefixes for task auto-load
-	options.prefixes = options.prefixes || ['grunt-', 'grunt-contrib-'];
+	options.prefixes = options.prefixes || ['grunt-', 'grunt-contrib-', ''];
 
 	// NPM tasks to load and config
 	options.npm = options.npm || [];
