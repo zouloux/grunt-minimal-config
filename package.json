@@ -1,7 +1,7 @@
 {
   "name": "grunt-minimal-config",
-  "version": "0.5.4",
-  "description": "Grunt plugin automatically loading NPM tasks and associated config file.",
+  "version": "1.0.0",
+  "description": "Grunt plugin loading splitted Gruntfiles for more readability.",
   "scripts": {
     "test": "grunt test --stack"
   },
@@ -15,7 +15,9 @@
     "gruntplugin",
     "load",
     "config",
-    "autoload"
+    "autoload",
+    "split",
+    "splitted"
   ],
   "author": "Alexis Bouhet",
   "license": "MIT",

@@ -1,7 +1,11 @@
 # grunt-minimal-config
 
-> Grunt plugin automatically loading NPM tasks and associated config file.
+> Grunt plugin loading splitted Gruntfiles for more readability.
 Useful if your Gruntfile.js is bloated by many plugins.
+
+##### New simpler version !
+
+See tag [v0.5.4](releases/tag/v0.5.4) for older implementation.
 
 
 ### About
@@ -9,159 +13,165 @@ Useful if your Gruntfile.js is bloated by many plugins.
 This plugin is used in [solid web-base](https://github.com/solid-js/web-base), a grunt boilerplate for solid web applications.
 
 
+### Installation
+
+```npm i grunt-minimal-config --save-dev```
+
+
 ### Usage
 
-Config files are named like the grunt plugin, inside a `grunt-config` subdirectory. This directory can be changed with `options.path`.
+If you want to split your config file like so :
 
-Exemple for grunt-concat :
-- `grunt-config/concat.js`
+- `Gruntfile.js` -> Default Gruntfile, nothing changes
+- `Gruntfile-scripts.js` -> all scripts tasks configuration
+- `Gruntfile-styles.js` -> all styles tasks configuration
 
 
-### GruntFile.js configuration exemple :
+Use this `Gruntfile.js` :
 
 ```javascript
 module.exports = function (grunt)
 {
-    // Init global config parameters
-    grunt.config.init({
-
-        // Load package definitions (needed to discover grunt packages)
-        pkg: grunt.file.readJSON('package.json'),
-
-        // Path configuration exemple ...
-        path: {
-            // Path to the source
-            src             : '../src/',
-
-            // Path to the libs
-            lib             : '../lib/'
-        },
-
-        /**
-         * Load grunt sub-configurations
-         * To load an NPM package, add file and name if from the plugin name in the grunt-config folder see path.config)
-         * Every NPM task will be automatically loaded if present in npm array.
-         * Local have to be loaded with grunt.task.loadTasks call.
-         */
+    grunt.loadNpmTasks('grunt-minimal-config');
+    grunt.initConfig({
         minimalConfig: {
-            // Load NPM tasks and config
-            npm: [
-                'autoprefixer',
-                'clean',
-                'concat',
-                'cssmin',
-                'deployer',
-                'imagemin',
-                //'json', // Will be ignored, grunt-plugin will be not loaded
-                'less',
-                'scaff',
-                'ts',
-                'uglify',
-                'watch'
-            ],
 
-            // Load local tasks and config
-            local: [
-                'myCustomPlugin'
-            ]
+            // Load sub-config files
+            src: 'Gruntfile-*.js'
+        }
+    });
+};
+```
+
+`src` is a default glob path so can also target folder like so : `grunt-configs/*.js`.
+We advice to use `Gruntfile-*.js` for more readability.
+
+### Sub-config file
+
+Here is a sub-config file example, simple :
+
+```javascript
+module.exports = function (grunt)
+{
+    // ------------------------------------------------------------------------- UGLIFY
+
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.config('uglify', {
+        options: {
+            mangle: true,
+            report: 'gzip',
+            comments: false
         }
     });
 
-    // Init grunt minimal config loader
+
+    // ....
+};
+
+```
+
+
+### Shared parameters
+
+
+The `__` contains all shared options. Useful if you want to share some path or parameters between sub-config files.
+Why not using the default grunt template system ?
+Because with this we have a better error checking, some IDE can auto-complete and also `__.src + 'Main.js'` is more readable than `<%= parameters.src %>Main.js`.
+
+More complete `Gruntfile.js` with shared parameters between sub-configs :
+
+```javascript
+module.exports = function (grunt)
+{
+    // ------------------------------------------------------------------------- CONFIG
+
+    // Shared parameters
+    let __ = {
+
+        /**
+         * Get --optimized CLI option.
+         * If this option is added, bundles will be compressed.
+         */
+        optimizedTarget     : grunt.option('optimized') || false,
+
+        // Glob extension to target all JS files
+        allJsFiles          : '**/*.js',
+
+        // Glob extension to target all Less files
+        allLessFiles        : '**/*.less',
+
+        // Assets output
+        assetsDestination   : 'www/assets/',
+
+        // Node module path
+        nodeModulesPath     : 'node_modules/',
+
+        // Project source files
+        srcPath             : 'src/'
+    };
+
+    // Load and init minimal-config
     grunt.loadNpmTasks('grunt-minimal-config');
+    grunt.initConfig({
+        minimalConfig: {
 
-    // Load local grunt tasks after config is loaded
-    grunt.task.loadTasks('./grunt-tasks/');
+            // Load sub-config files
+            src: 'Gruntfile-*.js',
 
-    // Declare your grunt tasks
-    grunt.registerTask('default', ['...']);
+            // Inject shared parameters in all loaded config files
+            parameters: __
+        }
+    });
+
+
+    // ------------------------------------------------------------------------- TASKS
+
+    grunt.registerTask('styles', 'less');
+
+    // We can use shared parameters here too
+    grunt.registerTask('default', (
+        !__.optimizedTarget
+        ? ['clean', 'styles', 'scripts']
+        : ['clean', 'styles', 'scripts', 'uglify']
+    ));
+
+    grunt.registerTask('watch', ['default', 'watch']);
 };
 ```
 
 
-### concat.js configuration exemple :
+Shared parameters are as second argument inside sub-config files.
+We advice using `__` everywhere for simplicity and auto-completion with good IDEs :
+
 
 ```javascript
-// Export a function which return the config object
-// Note we have grunt as parameter for helper functions
-module.exports = function (grunt)
+module.exports = function (grunt, __)
 {
-    return {
-        // Concat options
-        options: {
-            // Remove all comments
-            stripBanners: {
-                block: true,
-                line: true
-            },
+    if (__.optimizedTarget)
+    {
+        // ...
+    }
 
-            // Use ES5 strict mode
-            banner: '"use strict"\n\n',
+    // Configure less tasks
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.config('less', {
 
-            // Between each concatenated file
-            separator: '\n'
+        common: {
+            src: __.srcPath + 'common/Main.less',
+            dest: __.assetsDestination + 'css/common.css'
         },
 
-        // Configure your concat task
-        myTask : {
-           //...
+        myApp1: {
+            src: __.srcPath + 'myApp1/Main.less',
+            dest: __.assetsDestination + 'css/my-app-1.css'
+        },
+
+        myApp2: {
+            src: __.srcPath + 'myApp2/Main.less',
+            dest: __.assetsDestination + 'css/my-app-2.css'
         }
-    };
+    });
 };
+
 ```
-
-
-### Non standard NPM tasks
-
-**Special case :**
-You want to use an NPM grunt plugin which has a different name in config than in NPM.
-
-**For example :**
-*grunt-sprite-svg* uses config name : *sprite_svg* (note the use of dash and underscore here)
-
-You have to load it like this :
-
-**Gruntfile.js :**
-
-```javascript
-// (...)
-    minimalConfig: {
-        // Load NPM tasks and config
-        npm: [
-            'sprite-svg'
-        ]
-    }
-// (...)
-```
-
-And declare the config file like so :
-
-**grunt-config/sprite-svg.js :**
-
-```javascript
-module.exports = function (grunt)
-{
-    // Not here we return an array
-    // with config name as first element
-    // and config data coming right after
-    return [
-        // Name of the config
-        'sprite_svg',
-        
-        // Config data
-        {
-            // Options
-            options: {
-                //...
-            },
-
-            // Configure your concat task
-            myTask : {
-                //...
-            }
-        }
-    ];
-};
-```
-
 
