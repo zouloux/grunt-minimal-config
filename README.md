@@ -32,7 +32,6 @@ Use this `Gruntfile.js` :
 ```javascript
 module.exports = function (grunt)
 {
-    grunt.loadNpmTasks('grunt-minimal-config');
     grunt.initConfig({
         minimalConfig: {
 
@@ -40,6 +39,7 @@ module.exports = function (grunt)
             src: 'Gruntfile-*.js'
         }
     });
+    grunt.loadNpmTasks('grunt-minimal-config');
 };
 ```
 
@@ -111,7 +111,6 @@ module.exports = function (grunt)
     };
 
     // Load and init minimal-config
-    grunt.loadNpmTasks('grunt-minimal-config');
     grunt.initConfig({
         minimalConfig: {
 
@@ -122,6 +121,7 @@ module.exports = function (grunt)
             parameters: __
         }
     });
+    grunt.loadNpmTasks('grunt-minimal-config');
 
 
     // ------------------------------------------------------------------------- TASKS
