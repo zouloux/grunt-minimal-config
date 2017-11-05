@@ -9,7 +9,7 @@ module.exports = function (grunt)
 	// Check options
 	if (options == null)
 	{
-		grunt.fail.fatal( 'grunt-minimal-config // No minimalConfig node found into gurnt config. Please set config before loading this script.' );
+		grunt.fail.fatal( 'grunt-minimal-config // No minimalConfig node found into grunt config. Please set config before loading this script.' );
 	}
 
 	// Default parameters
