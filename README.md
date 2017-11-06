@@ -5,7 +5,7 @@ Useful if your Gruntfile.js is bloated by many plugins.
 
 ##### New simpler version !
 
-See tag [v0.5.4](releases/tag/v0.5.4) for older implementation.
+See tag [v0.5.4](https://github.com/zouloux/grunt-minimal-config/tree/v0.5.4) for older implementation.
 
 
 ### About
@@ -43,8 +43,10 @@ module.exports = function (grunt)
 };
 ```
 
-`src` is a default glob path so can also target folder like so : `grunt-configs/*.js`.
-We advice to use `Gruntfile-*.js` for more readability.
+`src` is a glob path, it can target folder like so : `grunt-configs/*.js`.
+But we advice to use `Gruntfile-*.js` for more readability in your file system.
+
+Important : `grunt.loadNpmTasks` needs to be after `minimalConfig` configuration.
 
 ### Sub-config file
 
@@ -75,8 +77,9 @@ module.exports = function (grunt)
 
 
 The `__` contains all shared options. Useful if you want to share some path or parameters between sub-config files.
-Why not using the default grunt template system ?
-Because with this we have a better error checking, some IDE can auto-complete and also `__.src + 'Main.js'` is more readable than `<%= parameters.src %>Main.js`.
+
+##### Why not using the default grunt template system ?
+Because with this we have a **better error checking**, some IDE can **auto-complete** and also `__.src + 'Main.js'` is **more readable** than `<%= parameters.src %>Main.js` with syntax coloration.
 
 More complete `Gruntfile.js` with shared parameters between sub-configs :
 
@@ -141,6 +144,7 @@ module.exports = function (grunt)
 
 
 Shared parameters are as second argument inside sub-config files.
+
 We advice using `__` everywhere for simplicity and auto-completion with good IDEs :
 
 

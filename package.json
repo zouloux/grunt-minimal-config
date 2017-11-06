@@ -1,6 +1,6 @@
 {
   "name": "grunt-minimal-config",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Grunt plugin loading splitted Gruntfiles for more readability.",
   "scripts": {
     "test": "grunt test --stack"

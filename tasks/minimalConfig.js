@@ -10,6 +10,8 @@ module.exports = function (grunt)
 	if (options == null)
 	{
 		grunt.fail.fatal( 'grunt-minimal-config // No minimalConfig node found into grunt config. Please set config before loading this script.' );
+		grunt.fail.fatal( 'This plugin have been updated recently so if this message is unexpected, you may set a legacy version into package.json.' );
+		grunt.fail.fatal( '"grunt-minimal-config" : "^0.5.4" should fix it :)' );
 	}
 
 	// Default parameters
@@ -23,6 +25,13 @@ module.exports = function (grunt)
 
 	// Expand files
 	let configFiles = grunt.file.expand({isFile:true}, options.src);
+
+	// No sub-config
+	if (configFiles.length == 0)
+	{
+		grunt.fail.warn( 'grunt-minimal-config // No sub-config file to load, is src glob ok ?' );
+		return;
+	}
 
 	// Browse files
 	configFiles.map( (fileName) =>
@@ -39,4 +48,7 @@ module.exports = function (grunt)
 		// Call with parameters
 		configExports( grunt, configParameters );
 	});
+
+	// Ok !
+	pGrunt.log.oklns('Minimal config : ' + configFiles.length + ' config files loaded.');
 };
