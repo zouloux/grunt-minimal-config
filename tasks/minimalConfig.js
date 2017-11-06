@@ -9,11 +9,7 @@ module.exports = function (grunt)
 	// Check options
 	if (options == null)
 	{
-		grunt.fail.fatal(
-			"grunt-minimal-config // No minimalConfig node found into grunt config. Please set config before loading this script.\n"
-			+ "This plugin have been updated recently so if this message is unexpected, you may set a legacy version into package.json.\n"
-			+ "\"grunt-minimal-config\" : \"^0.5.4\" should fix it :)"
-		);
+		grunt.fail.fatal('grunt-minimal-config // No minimalConfig node found into grunt config. Please set config before loading this script.');
 	}
 
 	// Default parameters
@@ -22,7 +18,12 @@ module.exports = function (grunt)
 	// Check if src is here
 	if (typeof options.src !== 'string')
 	{
-		grunt.fail.fatal( 'grunt-minimal-config // Please set src as a glob path at minimalConfig root.' );
+		grunt.fail.fatal(
+			"grunt-minimal-config // Please set src as a glob path at minimalConfig root.\n"
+			+ "\n"
+			+ "This plugin have been updated recently so if this message is unexpected, you may set a legacy version into package.json.\n"
+			+ "\"grunt-minimal-config\" : \"^0.5.4\" should fix it :)"
+		);
 	}
 
 	// Expand files
